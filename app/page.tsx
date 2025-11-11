@@ -169,7 +169,7 @@ export default function Home() {
           {/* Subtitle with animated underline */}
           <div className="relative inline-block">
             <p className="text-xl md:text-2xl text-purple-200 font-semibold">
-              Elegí un juego para empezar la aventura
+              Elegí un juego 
             </p>
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-purple-400 to-transparent animate-pulse" />
           </div>
@@ -183,7 +183,7 @@ export default function Home() {
             <div className="w-1 h-1 rounded-full bg-purple-400" />
             <div className="flex items-center gap-2">
               <Sparkles className="w-5 h-5" />
-              <span className="font-bold">Diversión Infinita</span>
+              <span className="font-bold">milaaa</span>
             </div>
           </div>
         </header>
@@ -211,7 +211,7 @@ export default function Home() {
         <div className={`mt-16 text-center transform transition-all duration-1000 delay-500 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
             <Sparkles className="w-4 h-4 text-purple-300" />
-            <span className="text-purple-200 font-semibold">¡Que comience la diversión!</span>
+            <span className="text-purple-200 font-semibold">¡Que Ganas de una Milanga!</span>
             <Sparkles className="w-4 h-4 text-purple-300" />
           </div>
         </div>
