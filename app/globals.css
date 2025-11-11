@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ajustes generales */
+html, body {
+  height: 100%;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0f172a; /* fallback */
+  color: #f8fafc;
+}
+
+::selection {
+  background: rgba(240, 171, 252, 0.25);
+}
