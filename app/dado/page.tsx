@@ -1,5 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import confetti from "canvas-confetti";
 
 const Sparkles = ({ className }: { className?: string }) => (
@@ -14,18 +15,20 @@ const Sandwich = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const HomeIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+    <polyline points="9 22 9 12 15 12 15 22" />
+  </svg>
+);
+
 export default function DicePage() {
+  const router = useRouter();
   const [rolling, setRolling] = useState(false);
   const [result, setResult] = useState<number | null>(null);
-  const [mounted, setMounted] = useState(false);
   const [rollCount, setRollCount] = useState(0);
   const [rotationX, setRotationX] = useState(-30);
   const [rotationY, setRotationY] = useState(45);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setMounted(true), 10);
-    return () => clearTimeout(timer);
-  }, []);
 
   const getFinalRotation = (face: number): { x: number; y: number } => {
     switch (face) {
@@ -41,12 +44,12 @@ export default function DicePage() {
 
   const getResultMessage = (face: number) => {
     const messages = [
-      "agregado de papas",
-      "segui participando",
-      "10% desc band de papas",
-      "5% desc mila comun 35cm", 
-      "segui participando",
-      "🥩 ¡2 AGG PAPAS GRATIS!"
+      "AGREGADO DE PAPAS",
+      "SEGUÍ PARTICIPANDO",
+      "10% DESC BAND PAPAS",
+      "5% DESC MILA 35CM", 
+      "SEGUÍ PARTICIPANDO",
+      "2 AGG PAPAS GRATIS"
     ];
     return messages[face - 1];
   };
@@ -60,36 +63,32 @@ export default function DicePage() {
     const spins = 5;
     const finalRot = getFinalRotation(face);
 
-    // Calcula la rotación total de manera que siempre dure 2 segundos
     setRotationX(finalRot.x + 360 * spins);
     setRotationY(finalRot.y + 360 * spins);
 
-    // Siempre 2 segundos exactos
     setTimeout(() => {
       setResult(face);
       setRolling(false);
 
-      // 🎉 Confetti temático de sandwich
       if (face === 6) {
         confetti({
-          particleCount: 150,
-          spread: 140,
+          particleCount: 200,
+          spread: 180,
           origin: { y: 0.5 },
           colors: ["#f59e0b", "#dc2626", "#16a34a"],
-          ticks: 100,
-          shapes: ["circle", "square"]
+          scalar: 1.3
         });
       } else if (face >= 4) {
         confetti({
-          particleCount: 90,
-          spread: 100,
+          particleCount: 100,
+          spread: 120,
           origin: { y: 0.5 },
-          colors: ["#f59e0b", "#fbbf24", "#dc2626"]
+          colors: ["#f59e0b", "#fbbf24"]
         });
-      } else {
+      } else if (face >= 1) {
         confetti({
-          particleCount: 50,
-          spread: 70,
+          particleCount: 60,
+          spread: 80,
           origin: { y: 0.5 }
         });
       }
@@ -97,130 +96,225 @@ export default function DicePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-900 via-amber-800 to-yellow-900 relative overflow-hidden">
-      {/* Decoración de fondo */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-10 left-10 text-6xl">🥖</div>
-        <div className="absolute top-20 right-20 text-6xl">🥩</div>
-        <div className="absolute bottom-20 left-20 text-6xl">🍅</div>
-        <div className="absolute bottom-10 right-10 text-6xl">🧀</div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-orange-900 to-gray-900 relative overflow-hidden">
+      {/* Patron decorativo */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle, #f59e0b 1px, transparent 1px)`,
+          backgroundSize: '50px 50px'
+        }} />
       </div>
 
-      <main
-        className={`relative min-h-screen flex flex-col items-center justify-center p-8 transition-all duration-1000 ${
-          mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-        }`}
-      >
-        <div className="mb-16 text-center">
-          <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-4 bg-gradient-to-r from-amber-200 via-orange-200 to-yellow-200 bg-clip-text text-transparent drop-shadow-lg">
-            🥪 Dado del Sanguchón 🥪
-          </h1>
+      {/* Decoración de fondo */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-10">
+        <div className="absolute top-10 left-10 text-5xl md:text-6xl animate-pulse">🥖</div>
+        <div className="absolute top-20 right-20 text-5xl md:text-6xl animate-pulse" style={{ animationDelay: '0.5s' }}>🥩</div>
+        <div className="absolute bottom-20 left-20 text-5xl md:text-6xl animate-pulse" style={{ animationDelay: '1s' }}>🍅</div>
+        <div className="absolute bottom-10 right-10 text-5xl md:text-6xl animate-pulse" style={{ animationDelay: '1.5s' }}>🧀</div>
+      </div>
 
-          <p className="text-xl md:text-2xl text-amber-100 font-semibold mb-8">
-            ¡Tirá el dado por tu milanesa perfecta!
+      {/* Botón volver */}
+      <button
+        onClick={() => router.push('/')}
+        className="fixed top-4 left-4 z-50 group"
+      >
+        <div className="absolute inset-0 bg-orange-500 rounded-xl blur opacity-60 group-hover:opacity-100 transition-opacity" />
+        <div className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 border-2 border-orange-400 shadow-xl transition-all duration-300 group-hover:scale-105">
+          <HomeIcon className="w-5 h-5 text-white" />
+          <span className="text-white font-black text-sm">MENÚ</span>
+        </div>
+      </button>
+
+      <main className="relative min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
+        
+        {/* Header */}
+        <div className="text-center mb-8 md:mb-12 z-10">
+          <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
+            <span className="text-4xl md:text-5xl animate-bounce">🥪</span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black tracking-tight bg-gradient-to-r from-amber-300 via-orange-300 to-yellow-300 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(251,146,60,0.5)]">
+              DADO DEL SANGUCHÓN
+            </h1>
+            <span className="text-4xl md:text-5xl animate-bounce" style={{ animationDelay: '0.2s' }}>🥪</span>
+          </div>
+
+          <p className="text-base md:text-xl lg:text-2xl text-orange-200 font-bold uppercase tracking-wide mb-4 md:mb-6">
+            🎲 Tirá el dado por tu milanesa perfecta 🎲
           </p>
 
+          {/* Stats */}
           {(rollCount > 0 || result) && (
-            <div className="flex items-center justify-center gap-4 text-amber-200">
+            <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4">
               {rollCount > 0 && (
-                <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
-                  <Sandwich className="w-5 h-5" />
-                  <span className="font-bold text-base">{rollCount} Tiradas</span>
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-orange-600/30 border-2 border-orange-500/50 backdrop-blur-sm">
+                  <Sandwich className="w-4 h-4 text-orange-200" />
+                  <span className="font-black text-orange-100 text-sm">⚡ {rollCount} Tiradas</span>
                 </div>
               )}
               {result && (
-                <div className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-orange-500/20 backdrop-blur-sm border border-orange-400/30">
-                  <Sparkles className="w-5 h-5 text-amber-300" />
-                  <span className="font-bold text-amber-200 text-base">Último: {result}</span>
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-green-600/30 border-2 border-green-500/50 backdrop-blur-sm animate-pulse">
+                  <Sparkles className="w-4 h-4 text-green-300" />
+                  <span className="font-black text-green-100 text-sm">🏆 Último: {result}</span>
                 </div>
               )}
             </div>
           )}
         </div>
 
-        {/* 🎲 Dado con temática de sandwich */}
-        <div className="relative" style={{ perspective: "1200px" }}>
-          <div
-            className="relative transition-transform duration-[2000ms] ease-out"
-            style={{
-              width: "200px",
-              height: "200px",
-              transformStyle: "preserve-3d",
-              transform: `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`
-            }}
-          >
-            {/* Cara 1 - Pan */}
-            <div className="absolute w-full h-full bg-gradient-to-br from-amber-300 to-amber-500 rounded-2xl flex items-center justify-center border-4 border-amber-200/50 shadow-2xl" style={{ transform: "translateZ(100px)" }}>
-              <div className="text-6xl">🥖</div>
-            </div>
+        {/* Container dado y controles */}
+        <div className="w-full max-w-6xl mx-auto grid lg:grid-cols-[1fr_400px] gap-6 lg:gap-8 items-center">
+          
+          {/* Dado 3D */}
+          <div className="flex justify-center items-center relative min-h-[300px] md:min-h-[400px]">
+            <div className="relative" style={{ perspective: "1200px" }}>
+              
+              {/* Glow */}
+              <div className="absolute inset-0 bg-orange-500/30 rounded-3xl blur-3xl scale-110" />
+              
+              {/* Dado */}
+              <div
+                className="relative transition-transform duration-[2000ms] ease-out"
+                style={{
+                  width: "180px",
+                  height: "180px",
+                  transformStyle: "preserve-3d",
+                  transform: `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`
+                }}
+              >
+                {/* Cara 1 - Pan */}
+                <div 
+                  className="absolute w-full h-full bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center border-4 border-amber-300/60 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
+                  style={{ transform: "translateZ(90px)" }}
+                >
+                  <div className="text-7xl drop-shadow-2xl">🥖</div>
+                </div>
 
-            {/* Cara 2 - Manteca */}
-            <div className="absolute w-full h-full bg-gradient-to-br from-yellow-200 to-yellow-400 rounded-2xl flex items-center justify-center border-4 border-yellow-100/50 shadow-2xl" style={{ transform: "rotateY(180deg) translateZ(100px)" }}>
-              <div className="text-6xl">🧈</div>
-            </div>
+                {/* Cara 2 - Manteca */}
+                <div 
+                  className="absolute w-full h-full bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-2xl flex items-center justify-center border-4 border-yellow-200/60 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
+                  style={{ transform: "rotateY(180deg) translateZ(90px)" }}
+                >
+                  <div className="text-7xl drop-shadow-2xl">🧈</div>
+                </div>
 
-            {/* Cara 3 - Lechuga */}
-            <div className="absolute w-full h-full bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center border-4 border-green-300/50 shadow-2xl" style={{ transform: "rotateY(90deg) translateZ(100px)" }}>
-              <div className="text-6xl">🥬</div>
-            </div>
+                {/* Cara 3 - Lechuga */}
+                <div 
+                  className="absolute w-full h-full bg-gradient-to-br from-green-500 to-green-700 rounded-2xl flex items-center justify-center border-4 border-green-400/60 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
+                  style={{ transform: "rotateY(90deg) translateZ(90px)" }}
+                >
+                  <div className="text-7xl drop-shadow-2xl">🥬</div>
+                </div>
 
-            {/* Cara 4 - Tomate */}
-            <div className="absolute w-full h-full bg-gradient-to-br from-red-400 to-red-600 rounded-2xl flex items-center justify-center border-4 border-red-300/50 shadow-2xl" style={{ transform: "rotateY(-90deg) translateZ(100px)" }}>
-              <div className="text-6xl">🍅</div>
-            </div>
+                {/* Cara 4 - Tomate */}
+                <div 
+                  className="absolute w-full h-full bg-gradient-to-br from-red-500 to-red-700 rounded-2xl flex items-center justify-center border-4 border-red-400/60 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
+                  style={{ transform: "rotateY(-90deg) translateZ(90px)" }}
+                >
+                  <div className="text-7xl drop-shadow-2xl">🍅</div>
+                </div>
 
-            {/* Cara 5 - Queso */}
-            <div className="absolute w-full h-full bg-gradient-to-br from-yellow-300 to-orange-400 rounded-2xl flex items-center justify-center border-4 border-yellow-200/50 shadow-2xl" style={{ transform: "rotateX(90deg) translateZ(100px)" }}>
-              <div className="text-6xl">🧀</div>
-            </div>
+                {/* Cara 5 - Queso */}
+                <div 
+                  className="absolute w-full h-full bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center border-4 border-yellow-300/60 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
+                  style={{ transform: "rotateX(90deg) translateZ(90px)" }}
+                >
+                  <div className="text-7xl drop-shadow-2xl">🧀</div>
+                </div>
 
-            {/* Cara 6 - Milanesa */}
-            <div className="absolute w-full h-full bg-gradient-to-br from-amber-600 to-orange-700 rounded-2xl flex items-center justify-center border-4 border-amber-400/50 shadow-2xl" style={{ transform: "rotateX(-90deg) translateZ(100px)" }}>
-              <div className="text-6xl">🥩</div>
-            </div>
-          </div>
-        </div>
+                {/* Cara 6 - Milanesa */}
+                <div 
+                  className="absolute w-full h-full bg-gradient-to-br from-amber-700 to-orange-800 rounded-2xl flex items-center justify-center border-4 border-amber-500/60 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
+                  style={{ transform: "rotateX(-90deg) translateZ(90px)" }}
+                >
+                  <div className="text-7xl drop-shadow-2xl">🥩</div>
+                </div>
+              </div>
 
-        {/* Botón */}
-        <div className="w-full max-w-lg space-y-6 px-4 mt-8">
-          <button onClick={roll} disabled={rolling} className="relative w-full group">
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl blur opacity-75 group-hover:opacity-100 transition-opacity" />
-            <div className="relative inline-flex items-center justify-center w-full rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 disabled:opacity-60 disabled:cursor-not-allowed px-8 py-5 font-black text-xl shadow-xl transition-all duration-300 group-hover:scale-105 text-white">
-              {rolling ? (
-                <>
-                  <div className="animate-spin mr-3 h-6 w-6 border-3 border-white border-t-transparent rounded-full" />
-                  Preparando el sánguche...
-                </>
-              ) : (
-                <>
-                  <Sandwich className="w-6 h-6 mr-3" />
-                  TIRAR EL DADO
-                  <Sparkles className="w-6 h-6 ml-3" />
-                </>
-              )}
-            </div>
-          </button>
-
-          {result && (
-            <div className="text-center min-h-[120px] flex items-center justify-center rounded-2xl bg-gradient-to-br from-amber-900/80 to-orange-900/80 ring-1 ring-amber-400/30 p-8 backdrop-blur-xl shadow-2xl">
-              <div className="space-y-3">
-                <p className="text-sm text-amber-200 font-semibold uppercase tracking-wider">
-                  {result === 6 ? "🎉 ¡MILANESA COMPLETA! 🎉" : result >= 4 ? "✨ ¡Buen ingrediente! ✨" : "🥪 Ingrediente 🥪"}
-                </p>
-                <div className="flex items-center justify-center gap-4">
-                  <span className="text-7xl">{["🥖", "🧈", "🥬", "🍅", "🧀", "🥩"][result - 1]}</span>
-                  <div className="text-center">
-                    <span className="block text-5xl md:text-6xl font-black bg-gradient-to-r from-amber-200 to-orange-200 bg-clip-text text-transparent">
-                      {result}
-                    </span>
-                    <span className="block text-lg text-amber-300 font-bold mt-2">
-                      {getResultMessage(result)}
+              {/* Indicador rodando */}
+              {rolling && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 top-[220px]">
+                  <div className="px-6 md:px-8 py-3 md:py-4 rounded-xl md:rounded-2xl bg-black/90 border-2 md:border-4 border-orange-500 shadow-[0_0_50px_rgba(249,115,22,0.8)]">
+                    <span className="text-lg md:text-2xl font-black text-orange-300 animate-pulse tracking-wider">
+                      ¡RODANDO!
                     </span>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
-          )}
+          </div>
+
+          {/* Panel de control */}
+          <div className="space-y-5 w-full max-w-md mx-auto">
+            
+            {/* Botón tirar */}
+            <button
+              onClick={roll}
+              disabled={rolling}
+              className="relative w-full group overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 blur-xl opacity-70 group-hover:opacity-100 transition-opacity" />
+              <div className="relative bg-gradient-to-r from-orange-600 via-amber-600 to-orange-600 hover:from-orange-500 hover:via-amber-500 hover:to-orange-500 disabled:from-gray-600 disabled:via-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed px-6 md:px-8 py-5 md:py-6 rounded-xl md:rounded-2xl font-black text-lg md:text-2xl text-white shadow-2xl transition-all duration-300 group-hover:scale-105 active:scale-95 border-4 border-orange-700 flex items-center justify-center gap-2 md:gap-3">
+                {rolling ? (
+                  <>
+                    <div className="animate-spin h-6 w-6 md:h-7 md:w-7 border-4 border-white border-t-transparent rounded-full" />
+                    <span>PREPARANDO...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sandwich className="w-6 h-6" />
+                    <span>TIRAR EL DADO</span>
+                    <Sparkles className="w-6 h-6" />
+                  </>
+                )}
+              </div>
+            </button>
+
+            {/* Resultado */}
+            <div className="bg-gradient-to-br from-orange-950/80 via-amber-950/80 to-orange-950/80 backdrop-blur-xl rounded-xl md:rounded-2xl border-4 border-orange-600/50 shadow-2xl p-5 md:p-6 min-h-[180px] md:min-h-[220px] flex items-center justify-center">
+              {result ? (
+                <div className="text-center space-y-3 w-full">
+                  <p className="text-xs md:text-sm text-orange-300 font-black uppercase tracking-widest">
+                    {result === 6 ? "🎉 ¡MILANESA COMPLETA! 🎉" : result >= 4 ? "✨ ¡Buen ingrediente! ✨" : "🥪 Ingrediente 🥪"}
+                  </p>
+                  
+                  <div className="flex items-center justify-center gap-3 md:gap-4">
+                    <span className="text-5xl md:text-7xl drop-shadow-2xl">
+                      {["🥖", "🧈", "🥬", "🍅", "🧀", "🥩"][result - 1]}
+                    </span>
+                    <div className="text-left">
+                      <span className="block text-4xl md:text-6xl font-black bg-gradient-to-r from-amber-300 to-orange-300 bg-clip-text text-transparent drop-shadow-lg">
+                        {result}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-orange-500/20 via-amber-500/20 to-orange-500/20 rounded-lg p-3 md:p-4 border-2 border-orange-500/40 mt-3">
+                    <span className="block text-base md:text-xl font-black text-orange-200">
+                      {getResultMessage(result)}
+                    </span>
+                  </div>
+
+                  <p className="text-xs md:text-sm text-orange-200/80 font-bold mt-2">
+                    🎉 ¡Guardá tu premio!
+                  </p>
+                </div>
+              ) : (
+                <div className="text-center space-y-2">
+                  <p className="text-2xl md:text-3xl font-bold text-orange-300">
+                    🎲 ¡Tirá el dado! 🎲
+                  </p>
+                  <p className="text-sm md:text-base text-orange-100/70">
+                    Presioná el botón para jugar
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Info */}
+            <div className="text-center text-xs md:text-sm text-orange-500/70 font-semibold">
+              ★ MILANESAS TUCUMANAS AUTÉNTICAS ★
+            </div>
+          </div>
+
         </div>
       </main>
     </div>
