@@ -46,14 +46,26 @@ export default function RoulettePage() {
     setSpinCount(prev => prev + 1);
 
     const idx = Math.floor(Math.random() * PRIZES.length);
-    const center = idx * segmentAngle + segmentAngle / 2;
-    const pointerDeg = -90;
-    const jitter = (Math.random() - 0.5) * (segmentAngle * 0.5);
-    const turns = 10 + Math.floor(Math.random() * 3);
-    const target = pointerDeg - (center + jitter) + 360 * turns;
-    const nextAngle = angle + target;
-
-    setAngle(nextAngle);
+    
+    // Número de vueltas completas para el efecto visual
+    const spins = 10 + Math.floor(Math.random() * 3);
+    
+    // Calcular cuántos grados necesitamos rotar para que el premio idx quede arriba
+    // Los segmentos están numerados 0-7 y cada uno ocupa 45 grados (360/8)
+    // El segmento 0 empieza en 0° y su centro está en 22.5°
+    // El puntero está en la parte superior (apuntando hacia abajo en 270° del círculo, o -90°)
+    
+    // Queremos que el centro del segmento idx esté en la posición 270° (arriba)
+    const segmentCenter = idx * segmentAngle + (segmentAngle / 2);
+    
+    // Necesitamos rotar la ruleta para alinear este segmento con 270°
+    // 270° es donde está el puntero en términos del círculo
+    const targetAngle = 270 - segmentCenter;
+    
+    // Añadir las vueltas completas
+    const totalRotation = targetAngle + (spins * 360);
+    
+    setAngle(totalRotation);
 
     setTimeout(() => {
       const prize = PRIZES[idx];

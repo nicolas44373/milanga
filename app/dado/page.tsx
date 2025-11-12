@@ -2,6 +2,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import confetti from "canvas-confetti";
+import { 
+  Sandwich as FriesIcon, 
+  Target, 
+  Beef, 
+  Gift,
+  Percent,
+} from "lucide-react";
 
 const Sparkles = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -52,6 +59,18 @@ export default function DicePage() {
       "2 AGG PAPAS GRATIS"
     ];
     return messages[face - 1];
+  };
+
+  const getPrizeIcon = (face: number) => {
+    const icons = [
+      { Icon: FriesIcon, color: "text-yellow-400" },        // 1: Agregado de papas
+      { Icon: Target, color: "text-blue-400" },             // 2: Seguí participando
+      { Icon: Percent, color: "text-green-400" },           // 3: 10% desc papas
+      { Icon: Beef, color: "text-orange-400" },             // 4: 5% desc mila
+      { Icon: Target, color: "text-blue-400" },             // 5: Seguí participando
+      { Icon: Gift, color: "text-pink-400" }                // 6: 2 agg papas gratis
+    ];
+    return icons[face - 1];
   };
 
   const roll = () => {
@@ -107,10 +126,10 @@ export default function DicePage() {
 
       {/* Decoración de fondo */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-10">
-        <div className="absolute top-10 left-10 text-5xl md:text-6xl animate-pulse">🥖</div>
-        <div className="absolute top-20 right-20 text-5xl md:text-6xl animate-pulse" style={{ animationDelay: '0.5s' }}>🥩</div>
+        <div className="absolute top-10 left-10 text-5xl md:text-6xl animate-pulse">🍗</div>
+        <div className="absolute top-20 right-20 text-5xl md:text-6xl animate-pulse" style={{ animationDelay: '0.5s' }}>🍟</div>
         <div className="absolute bottom-20 left-20 text-5xl md:text-6xl animate-pulse" style={{ animationDelay: '1s' }}>🍅</div>
-        <div className="absolute bottom-10 right-10 text-5xl md:text-6xl animate-pulse" style={{ animationDelay: '1.5s' }}>🧀</div>
+        <div className="absolute bottom-10 right-10 text-5xl md:text-6xl animate-pulse" style={{ animationDelay: '1.5s' }}>🥬</div>
       </div>
 
       {/* Botón volver */}
@@ -174,58 +193,58 @@ export default function DicePage() {
               <div
                 className="relative transition-transform duration-[2000ms] ease-out"
                 style={{
-                  width: "180px",
-                  height: "180px",
+                  width: "200px",
+                  height: "200px",
                   transformStyle: "preserve-3d",
                   transform: `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`
                 }}
               >
-                {/* Cara 1 - Pan */}
+                {/* Cara 1 - Pan superior */}
                 <div 
-                  className="absolute w-full h-full bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center border-4 border-amber-300/60 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
-                  style={{ transform: "translateZ(90px)" }}
+                  className="absolute w-full h-full bg-gradient-to-br from-amber-300 via-amber-400 to-amber-500 rounded-2xl flex items-center justify-center border-4 border-amber-600 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
+                  style={{ transform: "translateZ(100px)" }}
                 >
-                  <div className="text-7xl drop-shadow-2xl">🥖</div>
+                  <div className="text-9xl font-black text-amber-900 drop-shadow-[0_8px_12px_rgba(0,0,0,0.8)]">1</div>
                 </div>
 
-                {/* Cara 2 - Manteca */}
+                {/* Cara 2 - Lechuga */}
                 <div 
-                  className="absolute w-full h-full bg-gradient-to-br from-yellow-300 to-yellow-500 rounded-2xl flex items-center justify-center border-4 border-yellow-200/60 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
-                  style={{ transform: "rotateY(180deg) translateZ(90px)" }}
+                  className="absolute w-full h-full bg-gradient-to-br from-green-400 via-green-500 to-green-600 rounded-2xl flex items-center justify-center border-4 border-green-700 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
+                  style={{ transform: "rotateY(180deg) translateZ(100px)" }}
                 >
-                  <div className="text-7xl drop-shadow-2xl">🧈</div>
+                  <div className="text-9xl font-black text-green-900 drop-shadow-[0_8px_12px_rgba(0,0,0,0.8)]">2</div>
                 </div>
 
-                {/* Cara 3 - Lechuga */}
+                {/* Cara 3 - Tomate */}
                 <div 
-                  className="absolute w-full h-full bg-gradient-to-br from-green-500 to-green-700 rounded-2xl flex items-center justify-center border-4 border-green-400/60 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
-                  style={{ transform: "rotateY(90deg) translateZ(90px)" }}
+                  className="absolute w-full h-full bg-gradient-to-br from-red-400 via-red-500 to-red-600 rounded-2xl flex items-center justify-center border-4 border-red-700 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
+                  style={{ transform: "rotateY(90deg) translateZ(100px)" }}
                 >
-                  <div className="text-7xl drop-shadow-2xl">🥬</div>
+                  <div className="text-9xl font-black text-red-900 drop-shadow-[0_8px_12px_rgba(0,0,0,0.8)]">3</div>
                 </div>
 
-                {/* Cara 4 - Tomate */}
+                {/* Cara 4 - Queso */}
                 <div 
-                  className="absolute w-full h-full bg-gradient-to-br from-red-500 to-red-700 rounded-2xl flex items-center justify-center border-4 border-red-400/60 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
-                  style={{ transform: "rotateY(-90deg) translateZ(90px)" }}
+                  className="absolute w-full h-full bg-gradient-to-br from-yellow-300 via-yellow-400 to-orange-400 rounded-2xl flex items-center justify-center border-4 border-yellow-600 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
+                  style={{ transform: "rotateY(-90deg) translateZ(100px)" }}
                 >
-                  <div className="text-7xl drop-shadow-2xl">🍅</div>
+                  <div className="text-9xl font-black text-yellow-900 drop-shadow-[0_8px_12px_rgba(0,0,0,0.8)]">4</div>
                 </div>
 
-                {/* Cara 5 - Queso */}
+                {/* Cara 5 - Milanesa */}
                 <div 
-                  className="absolute w-full h-full bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center border-4 border-yellow-300/60 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
-                  style={{ transform: "rotateX(90deg) translateZ(90px)" }}
+                  className="absolute w-full h-full bg-gradient-to-br from-amber-600 via-orange-700 to-amber-800 rounded-2xl flex items-center justify-center border-4 border-amber-900 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
+                  style={{ transform: "rotateX(90deg) translateZ(100px)" }}
                 >
-                  <div className="text-7xl drop-shadow-2xl">🧀</div>
+                  <div className="text-9xl font-black text-amber-100 drop-shadow-[0_8px_12px_rgba(0,0,0,0.9)]">5</div>
                 </div>
 
-                {/* Cara 6 - Milanesa */}
+                {/* Cara 6 - Pan inferior */}
                 <div 
-                  className="absolute w-full h-full bg-gradient-to-br from-amber-700 to-orange-800 rounded-2xl flex items-center justify-center border-4 border-amber-500/60 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
-                  style={{ transform: "rotateX(-90deg) translateZ(90px)" }}
+                  className="absolute w-full h-full bg-gradient-to-br from-amber-500 via-amber-600 to-amber-700 rounded-2xl flex items-center justify-center border-4 border-amber-800 shadow-[0_10px_50px_rgba(0,0,0,0.5)]" 
+                  style={{ transform: "rotateX(-90deg) translateZ(100px)" }}
                 >
-                  <div className="text-7xl drop-shadow-2xl">🥩</div>
+                  <div className="text-9xl font-black text-amber-100 drop-shadow-[0_8px_12px_rgba(0,0,0,0.9)]">6</div>
                 </div>
               </div>
 
@@ -273,15 +292,20 @@ export default function DicePage() {
               {result ? (
                 <div className="text-center space-y-3 w-full">
                   <p className="text-xs md:text-sm text-orange-300 font-black uppercase tracking-widest">
-                    {result === 6 ? "🎉 ¡MILANESA COMPLETA! 🎉" : result >= 4 ? "✨ ¡Buen ingrediente! ✨" : "🥪 Ingrediente 🥪"}
+                    {result === 6 ? "🎉 ¡GRAN PREMIO! 🎉" : result >= 4 ? "✨ ¡Buen premio! ✨" : "🥪 Premio 🥪"}
                   </p>
                   
                   <div className="flex items-center justify-center gap-3 md:gap-4">
-                    <span className="text-5xl md:text-7xl drop-shadow-2xl">
-                      {["🥖", "🧈", "🥬", "🍅", "🧀", "🥩"][result - 1]}
-                    </span>
-                    <div className="text-left">
-                      <span className="block text-4xl md:text-6xl font-black bg-gradient-to-r from-amber-300 to-orange-300 bg-clip-text text-transparent drop-shadow-lg">
+                    {/* Icono del premio */}
+                    <div className={`${getPrizeIcon(result).color} drop-shadow-2xl`}>
+                      {(() => {
+                        const { Icon } = getPrizeIcon(result);
+                        return <Icon className="w-16 h-16 md:w-20 md:h-20" strokeWidth={2} />;
+                      })()}
+                    </div>
+                    
+                    <div className="text-center">
+                      <span className="block text-6xl md:text-8xl font-black bg-gradient-to-r from-amber-300 to-orange-300 bg-clip-text text-transparent drop-shadow-lg">
                         {result}
                       </span>
                     </div>
