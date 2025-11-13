@@ -82,8 +82,31 @@ export default function DicePage() {
     const spins = 5;
     const finalRot = getFinalRotation(face);
 
-    setRotationX(finalRot.x + 360 * spins);
-    setRotationY(finalRot.y + 360 * spins);
+    // Guardamos la posición actual normalizada
+    const currentX = rotationX;
+    const currentY = rotationY;
+    
+    // Calculamos cuánto rotar para llegar a la posición final
+    // Normalizamos la posición actual para saber dónde estamos
+    const normalizedCurrentX = ((currentX % 360) + 360) % 360;
+    const normalizedCurrentY = ((currentY % 360) + 360) % 360;
+    
+    // Calculamos la diferencia más corta para llegar a la posición final
+    let diffX = finalRot.x - normalizedCurrentX;
+    let diffY = finalRot.y - normalizedCurrentY;
+    
+    // Ajustamos para tomar el camino más corto
+    if (diffX > 180) diffX -= 360;
+    if (diffX < -180) diffX += 360;
+    if (diffY > 180) diffY -= 360;
+    if (diffY < -180) diffY += 360;
+    
+    // Añadimos las vueltas completas más el ajuste final
+    const newX = currentX + diffX + (360 * spins);
+    const newY = currentY + diffY + (360 * spins);
+    
+    setRotationX(newX);
+    setRotationY(newY);
 
     setTimeout(() => {
       setResult(face);
